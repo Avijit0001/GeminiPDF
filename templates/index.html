@@ -1,0 +1,60 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PDF Information Extractor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">PDF Information Extractor</h1>
+        
+        <form method="POST" enctype="multipart/form-data" id="uploadForm">
+            <div class="form-group">
+                <label for="pdf_file">Upload PDF File:</label>
+                <div class="file-input-wrapper">
+                    <input type="file" id="pdf_file" name="pdf_file" accept=".pdf" required class="form-control">
+                    <div class="file-name" id="fileName"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="query">What would you like to know about the document?</label>
+                <textarea id="query" name="query" rows="3" class="form-control" 
+                    placeholder="Example: Please summarize this document">Please summarize this document</textarea>
+            </div>
+
+            <button type="submit" class="btn">Analyze PDF</button>
+        </form>
+
+        <div id="loading" class="loading">
+            <div class="loading-spinner"></div>
+            <p>Analyzing document... Please wait...</p>
+        </div>
+
+        {% if error %}
+        <div class="error">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        {% if result %}
+        <div class="result">
+            <h2>Analysis Result:</h2>
+            <p>{{ result }}</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        document.getElementById('uploadForm').onsubmit = function() {
+            document.getElementById('loading').style.display = 'block';
+        };
+
+        document.getElementById('pdf_file').addEventListener('change', function() {
+            const fileName = this.files[0] ? this.files[0].name : '';
+            document.getElementById('fileName').textContent = fileName;
+        });
+    </script>
+</body>
+</html>
